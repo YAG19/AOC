@@ -27,6 +27,7 @@ public class Main {
         System.out.println(totalProduces);
     }
 
+    //Part 2
     private static int getCalibrationValueForStringDigits(String line) {
         Integer stringLeftDigit = -1;
         Integer stringRightDigit = -1;
@@ -65,6 +66,7 @@ public class Main {
     }
 
 
+    //Part 1
     private static Integer getCalibrationValue(String line) {
         int lastIndex = line.length() - 1;
         char leftDigit = 'l';

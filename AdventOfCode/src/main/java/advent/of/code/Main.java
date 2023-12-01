@@ -12,21 +12,19 @@ import java.util.stream.Stream;
 
 public class Main {
     private static int totalProduces = 0;
-
+    private static int totalCalibrationValue = 0;
     public static void main(String[] args) {
-        Integer totalCalibrationValue = 0;
         try (Stream<String> stream = Files.lines(Paths.get(String.valueOf(new File("C:/Users/yagne/Documents/adventOfCode.txt"))))) {
             List<String> stringList = stream.toList();
             for(String line: stringList){
-//              totalCalibrationValue +=  getCalibrationValue(line);
+              totalCalibrationValue +=  getCalibrationValue(line);
               totalProduces += getCalibrationValueForStringDigits(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        System.out.println(totalCalibrationValue);
+        System.out.println(totalCalibrationValue);
         System.out.println(totalProduces);
-
     }
 
     private static int getCalibrationValueForStringDigits(String line) {
@@ -35,30 +33,26 @@ public class Main {
         int lastIndex = line.length() - 1;
         String  digit = "";
         for(int i =0 ; i< line.length(); i++){
-            if(stringLeftDigit == -1 && Character.isDigit(line.charAt(i))){
-                    stringLeftDigit = Integer.parseInt(String.valueOf(line.charAt(i)));
-            }
-            else if(stringLeftDigit == -1)
-            {
-                String leftSubstring = line.substring(0, i+1 );
-                stringLeftDigit = checkForStringDigits(leftSubstring);
-            }
-
-            if(stringRightDigit == -1 && Character.isDigit(line.charAt(lastIndex))){
-                stringRightDigit = Integer.parseInt(String.valueOf(line.charAt(lastIndex)));
-            }
-            else if(stringRightDigit == -1)
-            {
-                String rightSubstring = line.substring(lastIndex);
-                stringRightDigit = checkForStringDigits(rightSubstring);
-            }
+            stringLeftDigit = findDigit(stringLeftDigit, line, i, line.substring(0, i + 1));
+            stringRightDigit = findDigit(stringRightDigit, line, lastIndex, line.substring(lastIndex));
             lastIndex--;
 
         }
-        System.out.println(stringLeftDigit + " " + stringRightDigit);
+//        System.out.println(stringLeftDigit + " " + stringRightDigit);
         digit = String.valueOf(stringLeftDigit ) + String.valueOf(stringRightDigit);
         return Integer.parseInt(digit);
 
+    }
+
+    private static Integer findDigit(Integer stringDigit, String line, int index, String subString) {
+        if(stringDigit == -1 && Character.isDigit(line.charAt(index))){
+                stringDigit = Integer.parseInt(String.valueOf(line.charAt(index)));
+        }
+        else if(stringDigit == -1)
+        {
+            stringDigit = checkForStringDigits(subString);
+        }
+        return stringDigit;
     }
 
     private static Integer checkForStringDigits(String line) {
@@ -70,21 +64,6 @@ public class Main {
         return -1;
     }
 
-    private static Map<String, Integer> mapOfDigit(){
-        Map<String,Integer> mapOfString = new HashMap<>();
-        mapOfString.put("zero", 0);
-        mapOfString.put("one", 1);
-        mapOfString.put("two", 2);
-        mapOfString.put("three", 3);
-        mapOfString.put("four", 4);
-        mapOfString.put("five", 5);
-        mapOfString.put("six", 6);
-        mapOfString.put("seven", 7);
-        mapOfString.put("eight", 8);
-        mapOfString.put("nine", 9);
-
-        return mapOfString;
-    }
 
     private static Integer getCalibrationValue(String line) {
         int lastIndex = line.length() - 1;
@@ -108,4 +87,20 @@ public class Main {
         return Integer.parseInt(digit);
     }
 
+    private static Map<String, Integer> mapOfDigit(){
+        Map<String,Integer> mapOfString = new HashMap<>();
+        mapOfString.put("zero", 0);
+        mapOfString.put("one", 1);
+        mapOfString.put("two", 2);
+        mapOfString.put("three", 3);
+        mapOfString.put("four", 4);
+        mapOfString.put("five", 5);
+        mapOfString.put("six", 6);
+        mapOfString.put("seven", 7);
+        mapOfString.put("eight", 8);
+        mapOfString.put("nine", 9);
+
+        return mapOfString;
     }
+
+}

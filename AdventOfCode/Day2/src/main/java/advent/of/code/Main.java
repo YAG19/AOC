@@ -7,12 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    static int red = 12;
-    static int green = 13;
-    static int blue = 14;
+    static int red = Integer.MAX_VALUE;
+    static int green = Integer.MAX_VALUE;
+    static int blue = Integer.MAX_VALUE;
     static int countId  = 0;
     static int possible = 1;
     private static int gameId = 0;
+    static int maxRedCubes = 0;
+    static int maxBlueCubes = 0;
+    static int maxGreenCubes = 0;
+    private static long totalPower = 0;
 
     public static void main(String[] args) {
 
@@ -29,7 +33,6 @@ public class Main {
                 }
                 possible = 1;
 
-
                 for (Map.Entry<Integer, String> entry : mapOfSet.entrySet()) {
                     if (entry.getValue().contains("Game")) {
 //                        System.out.print(entry.getValue());
@@ -42,15 +45,14 @@ public class Main {
                             char[] s = firstSet[i].toCharArray();
                             if(Character.isDigit(s[0]) && !firstSet[i].contains(":")){
                                 if(checkForValidCubes(firstSet[i+1], Integer.parseInt(firstSet[i]))){
-                                    System.out.println(firstSet[i] + "-" + firstSet[i+1]);
-
+//                                    System.out.println(firstSet[i] + "-" + firstSet[i+1]);
                                     possible = -1;
                                     break;
                                 }
                             }
                         }
                     } else {
-                        System.out.println(entry.getValue().trim());
+//                        System.out.println(entry.getValue().trim());
                         String[] otherSet = entry.getValue().split(" ");
                         for (int i = 0; i < otherSet.length - 1 ; i++) {
                             char[] s = otherSet[i].trim().toCharArray();
@@ -65,18 +67,24 @@ public class Main {
                     }
                 }
                 mapOfSet.clear();
-                System.out.println(possible);
+//                System.out.println(possible);
                 if(possible == 1){
-                    System.out.println(countId +"=="+ gameId);
+//                    System.out.println(countId +"=="+ gameId);
                     countId += gameId;
                 }
 
+                long powerOfEachSet = (long) maxRedCubes * maxBlueCubes * maxGreenCubes;
+                System.out.println(maxRedCubes +" " + maxGreenCubes +" " + maxBlueCubes);
+                totalPower += powerOfEachSet;
+                System.out.println(powerOfEachSet);
+                System.out.println(totalPower);
+                maxRedCubes = maxGreenCubes = maxBlueCubes = 0;
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = br.readLine();
 
             }
-             System.out.println(countId);
+//             System.out.println(countId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -89,12 +97,15 @@ public class Main {
         }
         System.out.println("NUmber of cubes " + numberOfCubes +" " + color);
         if(color.equals("red")){
+            if(numberOfCubes > maxRedCubes) maxRedCubes = numberOfCubes;
             return numberOfCubes > red;
         }
         if(color.equals("green")){
+            if(numberOfCubes > maxGreenCubes) maxGreenCubes = numberOfCubes;
             return  numberOfCubes > green;
         }
         if(color.equals("blue")){
+            if(numberOfCubes > maxBlueCubes) maxBlueCubes = numberOfCubes;
             return numberOfCubes > blue;
         }
          return false;
